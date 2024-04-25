@@ -1,0 +1,28 @@
+---
+kind: pipeline
+type: kubernetes
+name: build
+steps:
+- name: build
+  image: docker.io/debian:bookworm-slim
+  commands:
+  - echo "Building..."
+trigger:
+  branch:
+  - main
+  event:
+  - push
+---
+kind: pipeline
+type: kubernetes
+name: promote
+steps:
+- name: release
+  image: docker.io/debian:bookworm-slim
+  commands:
+  - env | sort
+trigger:
+  event:
+  - promote
+  target:
+  - production
